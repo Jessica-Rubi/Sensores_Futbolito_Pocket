@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Bitmap ball;
 
     private float xMax, yMax;
-    private float xPos, xAccel = 0.0f;
-    private float yPos, yAccel, porteria, porteria1  = 0.0f;
+    private float xPos, xSen = 0.0f;
+    private float yPos, ySen, porteria, porteria1  = 0.0f;
 
-    private Bitmap field;
-    private int xMaxF, yMaxF;
+    private Bitmap campo;
+    private int xMaxC, yMaxC;
 
     private int scoreA = 0;
     private int scoreB = 0;
@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(size);
 
-        xMaxF = (int) size.x;
-        yMaxF = (int) size.y;
+        xMaxC = (int) size.x;
+        yMaxC = (int) size.y;
 
         xMax = (float) size.x - 50;
         yMax = (float) size.y - 50;
@@ -91,29 +91,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            xAccel -= (float) event.values[0];
-            yAccel += (float) event.values[1];
+            xSen -= (float) event.values[0];
+            ySen += (float) event.values[1];
             updateBall();
         }
     }
 
     private void updateBall() {
-        xPos = xAccel + (xMax / 2);
-        yPos = yAccel + (yMax / 2);
+        xPos = xSen + (xMax / 2);
+        yPos = ySen + (yMax / 2);
         if (xPos > xMax) {
             xPos = xMax;
         } else if (xPos < 0) {
             xPos = 0;
         }
         if (yPos > yMax) {
-            xAccel = 0;
-            yAccel = 0;
+            xSen = 0;
+            ySen = 0;
             xPos = xMax / 2;
             yPos = yMax / 2;
             scoreA++;
         } else if (yPos < 0) {
-            xAccel = 0;
-            yAccel = 0;
+            xSen = 0;
+            ySen = 0;
             xPos = xMax / 2;
             yPos = yMax / 2;
             scoreB++;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         public vista(Context context) {
             super(context);
             Bitmap fieldSrc = BitmapFactory.decodeResource(getResources(), R.drawable.campo);
-            field = Bitmap.createScaledBitmap(fieldSrc, xMaxF, yMaxF, true);
+            campo = Bitmap.createScaledBitmap(fieldSrc, xMaxC, yMaxC, true);
 
             Bitmap ballSrc = BitmapFactory.decodeResource(getResources(), R.drawable.pelota);
             final int dstWidth = 50;
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawBitmap(field, 0, 0, null);
+            canvas.drawBitmap(campo, 0, 0, null);
 
             Paint paint = new Paint();
             paint.setColor(Color.WHITE);
